@@ -19,16 +19,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Install System Gradle
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      with:
+        packages: 'platforms;android-34 build-tools;34.0.0'
+
+    - name: Install System Gradle & Generate Wrapper
       run: |
-        sudo apt-get update
-        sudo apt-get install -y gradle
-
-    - name: Generate Gradle Wrapper
-      run: gradle wrapper --gradle-version 8.5
-
-    - name: Make gradlew executable
-      run: chmod +x gradlew
+        sudo apt-get update && sudo apt-get install -y gradle
+        gradle wrapper --gradle-version 8.5
+        chmod +x gradlew
 
     - name: Build APK
       run: ./gradlew assembleDebug --stacktrace --no-daemon
